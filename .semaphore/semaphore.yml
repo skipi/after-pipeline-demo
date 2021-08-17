@@ -1,0 +1,16 @@
+version: v1.0
+name: Semaphore Go CI example
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: Run tests
+    task:
+      jobs:
+        - name: test
+          parallelism: 20
+          commands:
+            - checkout
+            - echo Publishing ${SEMAPHORE_JOB_INDEX}/${SEMAPHORE_JOB_COUNT} test
+            - test-results publish test/junit-${SEMAPHORE_JOB_INDEX}.xml
