@@ -1,5 +1,5 @@
 version: v1.0
-name: Semaphore Go CI example
+name: after_pipeline example
 agent:
   machine:
     type: e1-standard-2
@@ -7,14 +7,14 @@ agent:
 after_pipeline:
   task:
     jobs:
-      - name: Test results
+      - name: Reports
         commands:
           - test-results gen-pipeline-report
-      - name: Some long running job
+      - name: Long job
         commands:
           - echo I RUN FOR A LONG TIME
           - sleep 60
-      - name: Some failure
+      - name: Failed job
         commands:
           - echo I FAIL!
           - sleep 10
