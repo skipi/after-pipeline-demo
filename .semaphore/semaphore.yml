@@ -10,6 +10,10 @@ after_pipeline:
       - name: Test results
         commands:
           - test-results gen-pipeline-report
+      - name: After parallel
+        parallelism: 20
+        commands:
+          - echo Running in parallel ${SEMAPHORE_JOB_INDEX}/${SEMAPHORE_JOB_COUNT}
 blocks:
   - name: Run tests
     task:
@@ -17,6 +21,7 @@ blocks:
         - name: Test
           parallelism: 2
           commands:
+            - sleep 10
             - checkout
             - echo Publishing ${SEMAPHORE_JOB_INDEX}/${SEMAPHORE_JOB_COUNT} test
             - test-results publish test/junit-${SEMAPHORE_JOB_INDEX}.xml
