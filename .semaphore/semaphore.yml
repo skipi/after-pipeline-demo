@@ -7,15 +7,15 @@ agent:
 after_pipeline:
   task:
     jobs:
-      - name: Workflow test-results
+      - name: Test results
         commands:
           - test-results gen-pipeline-report
 blocks:
   - name: Run tests
     task:
       jobs:
-        - name: test
-          parallelism: 20
+        - name: Test
+          parallelism: 2
           commands:
             - checkout
             - echo Publishing ${SEMAPHORE_JOB_INDEX}/${SEMAPHORE_JOB_COUNT} test
