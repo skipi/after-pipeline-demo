@@ -10,6 +10,15 @@ after_pipeline:
       - name: Test results
         commands:
           - test-results gen-pipeline-report
+      - name: Some long running job
+        commands:
+          - echo I RUN FOR A LONG TIME
+          - sleep 60
+      - name: Some failure
+        commands:
+          - echo I FAIL!
+          - sleep 10
+          - exit 1
 blocks:
   - name: Run tests
     task:
@@ -17,6 +26,15 @@ blocks:
         - name: Test
           parallelism: 2
           commands:
+            - sleep 10
             - checkout
             - echo Publishing ${SEMAPHORE_JOB_INDEX}/${SEMAPHORE_JOB_COUNT} test
             - test-results publish test/junit-${SEMAPHORE_JOB_INDEX}.xml
+        - name: Test failed
+          parallelism: 1
+          commands:
+            - sleep 10
+            - checkout
+            - echo Publishing ${SEMAPHORE_JOB_INDEX}/${SEMAPHORE_JOB_COUNT} test
+            - test-results publish test/junit-failed-${SEMAPHORE_JOB_INDEX}.xml
+            - exit 1
