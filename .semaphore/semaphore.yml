@@ -3,7 +3,7 @@ name: after_pipeline example
 agent:
   machine:
     type: e1-standard-2
-    os_image: ubuntu2004
+    os_image: ubuntu1804
 after_pipeline:
   task:
     jobs:
@@ -19,6 +19,15 @@ after_pipeline:
           - echo I FAIL!
           - sleep 10
           - exit 1
+      - name: Pipeline metrics
+        commands:
+          - echo SEMAPHORE_PIPELINE_DURATION=${SEMAPHORE_PIPELINE_DURATION}
+          - echo SEMAPHORE_PIPELINE_DURATION_INIT=${SEMAPHORE_PIPELINE_DURATION_INIT}
+          - echo SEMAPHORE_PIPELINE_DURATION_QUEUEING=${SEMAPHORE_PIPELINE_DURATION_QUEUEING}
+          - echo SEMAPHORE_PIPELINE_DURATION_RUNNING=${SEMAPHORE_PIPELINE_DURATION_RUNNING}
+          - echo SEMAPHORE_PIPELINE_CREATED_AT=${SEMAPHORE_PIPELINE_CREATED_AT}
+          - echo SEMAPHORE_PIPELINE_STARTED_AT=${SEMAPHORE_PIPELINE_STARTED_AT}
+          - echo SEMAPHORE_PIPELINE_DONE_AT=${SEMAPHORE_PIPELINE_DONE_AT}
 blocks:
   - name: Run tests
     task:
@@ -38,3 +47,6 @@ blocks:
             - echo Publishing ${SEMAPHORE_JOB_INDEX}/${SEMAPHORE_JOB_COUNT} test
             - test-results publish test/junit-failed-${SEMAPHORE_JOB_INDEX}.xml
             - exit 1
+promotions:
+  - name: Promo
+    pipeline_file: promo.yml
