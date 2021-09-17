@@ -1,66 +1,38 @@
 version: v1.0
-name: Front Application
+name: Documentation
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 
 blocks:
-  - name: Elixir Unit Tests
+  - name: Build Elixir Docs
     dependencies: []
     task:
       jobs:
-        - name: Test
-          parallelism: 5
+        - name: Build
           commands:
             - checkout
             - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "🔬 Elixir Unit" test/$FILE
-
-  - name: Elixir Integration Tests
-    dependencies: ["Elixir Unit Tests"]
-    task:
-      jobs:
-        - name: Test
-          parallelism: 2
-          commands:
-            - checkout
-            - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "⚙️ Elixir Integration" test/$FILE
-
-  - name: JS Unit Tests
+            - test-results publish --name "👷 Elixir Docs" test/$FILE
+  - name: Build JS Docs
     dependencies: []
     task:
       jobs:
-        - name: Test
-          parallelism: 5
+        - name: Build
           commands:
             - checkout
             - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "🔬 JS Unit" test/$FILE
-
-  - name: JS Integration Tests
-    dependencies: ["JS Unit Tests"]
+            - test-results publish --name "👷 JS Docs" test/$FILE
+  - name: Publish docs
+    dependencies: ["Build Elixir Docs", "Build JS Docs"]
     task:
       jobs:
-        - name: Test
-          parallelism: 2
+        - name: Publish
           commands:
             - checkout
             - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "⚙️ JS Integration" test/$FILE
-
-
-  - name: "Browser tests"
-    dependencies: ["JS Integration Tests", "Elixir Integration Tests"]
-    task:
-      jobs:
-        - name: Test
-          parallelism: 1
-          commands:
-            - checkout
-            - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "🗔 Browser" test/$FILE
+            - test-results publish --name "📰 Publish Docs" test/$FILE
 
 after_pipeline:
   task:
@@ -80,14 +52,3 @@ after_pipeline:
             echo "SEMAPHORE_PIPELINE_DONE_AT=${SEMAPHORE_PIPELINE_DONE_AT}($(date -d @${SEMAPHORE_PIPELINE_DONE_AT}))" &&
             echo "SEMAPHORE_PIPELINE_RESULT=${SEMAPHORE_PIPELINE_RESULT}" &&
             echo "SEMAPHORE_PIPELINE_RESULT_REASON=${SEMAPHORE_PIPELINE_RESULT_REASON}"
-
-promotions:
-  - name: Build
-    pipeline_file: build.yml
-    auto_promote:
-      when: "result = 'passed'"
-
-  - name: Documentation
-    pipeline_file: documentation.yml
-    auto_promote:
-      when: "result = 'passed'"
