@@ -4,7 +4,6 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-
 blocks:
   - name: Build release
     dependencies: []
@@ -14,18 +13,17 @@ blocks:
           commands:
             - checkout
             - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "👷 Application Release" test/$FILE
-
+            - "test-results publish --name \"\U0001F477 Application Release\" test/$FILE"
   - name: Publish release
-    dependencies: ["Build release"]
+    dependencies:
+      - Build release
     task:
       jobs:
         - name: Publish
           commands:
             - checkout
             - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "📰 Publish Release" test/$FILE
-
+            - "test-results publish --name \"\U0001F4F0 Publish Release\" test/$FILE"
 after_pipeline:
   task:
     jobs:
@@ -35,12 +33,5 @@ after_pipeline:
       - name: Pipeline metrics
         commands:
           - >-
-            echo "SEMAPHORE_PIPELINE_TOTAL_DURATION=${SEMAPHORE_PIPELINE_TOTAL_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_INIT_DURATION=${SEMAPHORE_PIPELINE_INIT_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_QUEUEING_DURATION=${SEMAPHORE_PIPELINE_QUEUEING_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_RUNNING_DURATION=${SEMAPHORE_PIPELINE_RUNNING_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_CREATED_AT=${SEMAPHORE_PIPELINE_CREATED_AT}($(date -d @${SEMAPHORE_PIPELINE_CREATED_AT}))" &&
-            echo "SEMAPHORE_PIPELINE_STARTED_AT=${SEMAPHORE_PIPELINE_STARTED_AT}($(date -d @${SEMAPHORE_PIPELINE_STARTED_AT}))" &&
-            echo "SEMAPHORE_PIPELINE_DONE_AT=${SEMAPHORE_PIPELINE_DONE_AT}($(date -d @${SEMAPHORE_PIPELINE_DONE_AT}))" &&
-            echo "SEMAPHORE_PIPELINE_RESULT=${SEMAPHORE_PIPELINE_RESULT}" &&
-            echo "SEMAPHORE_PIPELINE_RESULT_REASON=${SEMAPHORE_PIPELINE_RESULT_REASON}"
+            echo "SEMAPHORE_PIPELINE_TOTAL_DURATION=${SEMAPHORE_PIPELINE_TOTAL_DURATION}" && echo "SEMAPHORE_PIPELINE_INIT_DURATION=${SEMAPHORE_PIPELINE_INIT_DURATION}" && echo "SEMAPHORE_PIPELINE_QUEUEING_DURATION=${SEMAPHORE_PIPELINE_QUEUEING_DURATION}" && echo "SEMAPHORE_PIPELINE_RUNNING_DURATION=${SEMAPHORE_PIPELINE_RUNNING_DURATION}" && echo "SEMAPHORE_PIPELINE_CREATED_AT=${SEMAPHORE_PIPELINE_CREATED_AT}($(date -d @${SEMAPHORE_PIPELINE_CREATED_AT}))" && echo
+            "SEMAPHORE_PIPELINE_STARTED_AT=${SEMAPHORE_PIPELINE_STARTED_AT}($(date -d @${SEMAPHORE_PIPELINE_STARTED_AT}))" && echo "SEMAPHORE_PIPELINE_DONE_AT=${SEMAPHORE_PIPELINE_DONE_AT}($(date -d @${SEMAPHORE_PIPELINE_DONE_AT}))" && echo "SEMAPHORE_PIPELINE_RESULT=${SEMAPHORE_PIPELINE_RESULT}" && echo "SEMAPHORE_PIPELINE_RESULT_REASON=${SEMAPHORE_PIPELINE_RESULT_REASON}"
