@@ -25,7 +25,6 @@ blocks:
           commands:
             - checkout
             - FILE=$(ls test | shuf -n 1)
-            - echo test
             - test-results publish --name "⚙️ Elixir Integration" test/$FILE
   - name: JS Unit Tests
     dependencies: []
