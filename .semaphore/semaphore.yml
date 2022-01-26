@@ -1,93 +1,18 @@
 version: v1.0
-name: Front Application
+name: Test
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-
 blocks:
   - name: Elixir Unit Tests
     dependencies: []
     task:
       jobs:
         - name: Test
-          parallelism: 5
-          commands:
-            - checkout
-            - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "🔬 Elixir Unit" test/$FILE
-
-  - name: Elixir Integration Tests
-    dependencies: ["Elixir Unit Tests"]
-    task:
-      jobs:
-        - name: Test
-          parallelism: 2
-          commands:
-            - checkout
-            - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "⚙️ Elixir Integration" test/$FILE
-
-  - name: JS Unit Tests
-    dependencies: []
-    task:
-      jobs:
-        - name: Test
-          parallelism: 5
-          commands:
-            - checkout
-            - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "🔬 JS Unit" test/$FILE
-
-  - name: JS Integration Tests
-    dependencies: ["JS Unit Tests"]
-    task:
-      jobs:
-        - name: Test
-          parallelism: 2
-          commands:
-            - checkout
-            - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "⚙️ JS Integration" test/$FILE
-
-
-  - name: "Browser tests"
-    dependencies: ["JS Integration Tests", "Elixir Integration Tests"]
-    task:
-      jobs:
-        - name: Test
-          parallelism: 1
-          commands:
-            - checkout
-            - FILE=$(ls test | shuf -n 1)
-            - test-results publish --name "🗔 Browser" test/$FILE
-
+          commands: []
 after_pipeline:
   task:
     jobs:
-      - name: Reports
-        commands:
-          - test-results gen-pipeline-report
       - name: Pipeline metrics
-        commands:
-          - >-
-            echo "SEMAPHORE_PIPELINE_TOTAL_DURATION=${SEMAPHORE_PIPELINE_TOTAL_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_INIT_DURATION=${SEMAPHORE_PIPELINE_INIT_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_QUEUEING_DURATION=${SEMAPHORE_PIPELINE_QUEUEING_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_RUNNING_DURATION=${SEMAPHORE_PIPELINE_RUNNING_DURATION}" &&
-            echo "SEMAPHORE_PIPELINE_CREATED_AT=${SEMAPHORE_PIPELINE_CREATED_AT}($(date -d @${SEMAPHORE_PIPELINE_CREATED_AT}))" &&
-            echo "SEMAPHORE_PIPELINE_STARTED_AT=${SEMAPHORE_PIPELINE_STARTED_AT}($(date -d @${SEMAPHORE_PIPELINE_STARTED_AT}))" &&
-            echo "SEMAPHORE_PIPELINE_DONE_AT=${SEMAPHORE_PIPELINE_DONE_AT}($(date -d @${SEMAPHORE_PIPELINE_DONE_AT}))" &&
-            echo "SEMAPHORE_PIPELINE_RESULT=${SEMAPHORE_PIPELINE_RESULT}" &&
-            echo "SEMAPHORE_PIPELINE_RESULT_REASON=${SEMAPHORE_PIPELINE_RESULT_REASON}"
-
-promotions:
-  - name: Build
-    pipeline_file: build.yml
-    auto_promote:
-      when: "result = 'passed'"
-
-  - name: Documentation
-    pipeline_file: documentation.yml
-    auto_promote:
-      when: "result = 'passed'"
+        commands: []
