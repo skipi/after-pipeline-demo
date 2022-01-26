@@ -9,10 +9,10 @@ blocks:
     dependencies: []
     task:
       jobs:
-        - name: Test
+        - name: Nameless 1
           commands: []
 after_pipeline:
   task:
     jobs:
-      - name: Pipeline metrics
+      - name: Nameless 1
         commands: []
