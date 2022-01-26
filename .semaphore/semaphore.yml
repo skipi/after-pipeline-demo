@@ -9,10 +9,10 @@ blocks:
     dependencies: []
     task:
       jobs:
-        - name: ''
-          commands: []
+        - name: 'foo'
+          commands: ''
 after_pipeline:
   task:
     jobs:
-      - name: ''
-        commands: []
+      - name: 'bar'
+        commands: ''
