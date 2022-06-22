@@ -1,0 +1,15 @@
+version: v1.0
+name: Push artifacts
+
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Push artifacts
+    task:
+      jobs:
+        - commands:
+            - for i in {1..100}; do fallocate -l 10M foo__${i}; done
+            - for i in {1..100}; do artifact push project foo__${i} -f ; done

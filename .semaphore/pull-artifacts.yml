@@ -1,0 +1,14 @@
+version: v1.0
+name: Pull artifacts
+
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Pull artifacts
+    task:
+      jobs:
+        - commands:
+            - for i in {1..10}; do for j in {1..10}; do rm foo__${i}; (artifact pull project foo__${i} &) ; done ; done
