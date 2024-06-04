@@ -10,7 +10,7 @@ blocks:
   - task:
       jobs:
         - commands:
-            - echo "Hello world!"
+            - echo "Hello worlds!"
 promotions:
   - name: push artifacts
     pipeline_file: push-artifacts.yml
