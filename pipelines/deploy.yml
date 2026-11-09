@@ -1,0 +1,14 @@
+version: v1.0
+name: "smoke-test central deploy, version 1"
+agent:
+  machine:
+    type: f1-standard-2
+    os_image: ubuntu2204
+blocks:
+  - name: Deploy
+    task:
+      jobs:
+        - name: Deploy
+          commands:
+            - echo "central version 1"
+            - echo "CENTRAL_REF=$CENTRAL_REF DEPLOY_ENV=$DEPLOY_ENV"
