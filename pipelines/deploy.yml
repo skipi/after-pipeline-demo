@@ -1,5 +1,5 @@
 version: v1.0
-name: "smoke-test central deploy, version 1"
+name: "smoke-test central deploy, version 2"
 agent:
   machine:
     type: f1-standard-2
@@ -10,5 +10,7 @@ blocks:
       jobs:
         - name: Deploy
           commands:
-            - echo "central version 1"
+            - echo "central version 2"
             - echo "CENTRAL_REF=$CENTRAL_REF DEPLOY_ENV=$DEPLOY_ENV"
+            - echo "version 2 fails on purpose"
+            - "false"
